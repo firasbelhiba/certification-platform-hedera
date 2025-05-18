@@ -28,3 +28,13 @@ exports.getMyCourses = async (req, res) => {
         res.status(500).json({ msg: 'Failed to fetch courses' });
     }
 };
+
+
+exports.getAllCourses = async (req, res) => {
+    try {
+        const courses = await Course.find().sort({ createdAt: -1 });
+        res.json(courses);
+    } catch (err) {
+        res.status(500).json({ msg: 'Failed to fetch courses' });
+    }
+};
