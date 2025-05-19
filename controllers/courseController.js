@@ -30,10 +30,27 @@ exports.getMyCourses = async (req, res) => {
 };
 
 
+const Enrollment = require('../models/Enrollment');
+
 exports.getAllCourses = async (req, res) => {
     try {
-        const courses = await Course.find().sort({ createdAt: -1 });
-        res.json(courses);
+        const courses = await Course.find().lean(); // lean() for plain JS objects
+
+        // If token exists and user is a student
+        let enrolledCourses = [];
+
+        if (req.user && req.user.role === 'student') {
+            const enrollments = await Enrollment.find({ userId: req.user._id }).select('courseId');
+            enrolledCourses = enrollments.map(e => e.courseId.toString());
+        }
+
+        // Mark enrolled status per course
+        const result = courses.map(course => ({
+            ...course,
+            enrolled: enrolledCourses.includes(course._id.toString())
+        }));
+
+        res.json(result);
     } catch (err) {
         res.status(500).json({ msg: 'Failed to fetch courses' });
     }
