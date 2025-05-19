@@ -5,6 +5,7 @@ const courseSchema = new mongoose.Schema({
     description: String,
     maxStudents: Number,
     instructorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    tokenId: { type: String, default: null },
     createdAt: { type: Date, default: Date.now },
 });
 

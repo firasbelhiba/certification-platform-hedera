@@ -5,7 +5,10 @@ const enrollmentSchema = new mongoose.Schema({
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
     enrolledAt: { type: Date, default: Date.now },
     completed: { type: Boolean, default: false },
-    nftIssued: { type: Boolean, default: false }
+    nftIssued: { type: Boolean, default: false },
+    certificateMetadataUrl: String,
+    tokenId: String,
+    serialNumber: Number,
 });
 
 module.exports = mongoose.model('Enrollment', enrollmentSchema);
